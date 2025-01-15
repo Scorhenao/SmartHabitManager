@@ -1,7 +1,7 @@
 interface LightModeTheme {
   colors: {
     background: string;
-    text: string;
+    texts: string;
     textSecondary: string;
     buttons: {
       primary: string;
@@ -19,7 +19,7 @@ interface LightModeTheme {
 export const lightModeTheme: LightModeTheme = {
   colors: {
     background: '#FDFDFB',
-    text: '#111827',
+    texts: '#111827',
     textSecondary: '#9CA3AF',
     buttons: {
       primary: '#4CAF92',

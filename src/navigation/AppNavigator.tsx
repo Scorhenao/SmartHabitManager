@@ -6,7 +6,11 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <stack.Navigator initialRouteName="Login">
-        <stack.Screen name="Login" component={LoginScreen} />
+        <stack.Screen
+          name="Login"
+          options={{headerShown: false}}
+          component={LoginScreen}
+        />
       </stack.Navigator>
     </NavigationContainer>
   );

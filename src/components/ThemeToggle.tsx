@@ -1,10 +1,13 @@
-import React, {useState, useRef} from 'react';
+import React, {useRef} from 'react';
 import {View, TouchableOpacity, Animated, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {useDispatch, useSelector} from 'react-redux';
+import {toggleDarkMode} from '../redux/reducers/themeSlice';
 
 export default function ThemeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
+  const dispatch = useDispatch();
+  const isDarkMode = useSelector(state => state.theme.darkMode);
 
   const toggleTheme = () => {
     Animated.timing(rotation, {
@@ -12,7 +15,7 @@ export default function ThemeToggle() {
       duration: 500,
       useNativeDriver: true,
     }).start();
-    setIsDarkMode(!isDarkMode);
+    dispatch(toggleDarkMode());
   };
 
   const rotateInterpolation = rotation.interpolate({
@@ -26,7 +29,7 @@ export default function ThemeToggle() {
         <Animated.View style={{transform: [{rotate: rotateInterpolation}]}}>
           <Icon
             name={isDarkMode ? 'sun' : 'moon'}
-            size={50}
+            size={30}
             color={isDarkMode ? '#FFD700' : '#4CAF92'}
           />
         </Animated.View>
@@ -37,9 +40,7 @@ export default function ThemeToggle() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
 });
