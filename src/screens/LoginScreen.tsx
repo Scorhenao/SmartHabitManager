@@ -7,10 +7,12 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import ThemeToggle from '../components/ThemeToggle';
 import CustomInput from '../components/CustomInput';
+import {useUser} from '../hooks/useUser';
 
 const LoginScreen = () => {
   const theme = useSelector(state => state.theme.theme);
@@ -18,8 +20,14 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log(`Email: ${email}, Password: ${password}`);
+  const {loginUser} = useUser();
+
+  const handleLogin = async () => {
+    try {
+      await loginUser({email, password});
+    } catch (error: any) {
+      Alert.alert('Error', error);
+    }
   };
 
   return (

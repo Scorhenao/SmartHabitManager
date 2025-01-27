@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -17,24 +18,22 @@ import {useUser} from '../hooks/useUser';
 const RegisterScreen = () => {
   const theme = useSelector(state => state.theme.theme);
 
-  const [name, setName] = useState('Juan Perez');
-  const [email, setEmail] = useState('juan@example.com');
-  const [cellphone, setCellphone] = useState('1234567890');
-  const [password, setPassword] = useState('password1234');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [cellphone, setCellphone] = useState('');
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Usar el hook useUser
   const {registerUser} = useUser();
 
   const handleRegister = async () => {
     if (password !== confirmPassword) {
-      alert('Passwords do not match!');
+      Alert.alert('Passwords do not match!');
       return;
     }
 
-    // Datos que enviarás en la solicitud de registro
     const data = {
       name,
       email,
@@ -44,9 +43,9 @@ const RegisterScreen = () => {
 
     try {
       const response = await registerUser(data);
-      alert(response.message); // Aquí puedes manejar la respuesta (ej. mostrar mensaje)
+      Alert.alert(response.message);
     } catch (error) {
-      alert('Error registering user!');
+      Alert.alert('Error registering user!');
     }
   };
 
