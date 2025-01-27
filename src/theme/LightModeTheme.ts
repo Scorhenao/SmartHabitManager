@@ -8,6 +8,11 @@ interface LightModeTheme {
       secondary: string;
       tertiary: string;
     };
+    inputs: {
+      backgroundColor: string;
+      borderColor: string;
+      color: string;
+    };
     reminder: string;
     alert: string;
     success: string;
@@ -25,6 +30,11 @@ export const lightModeTheme: LightModeTheme = {
       primary: '#4CAF92',
       secondary: '#5C9CED',
       tertiary: '#d83320',
+    },
+    inputs: {
+      backgroundColor: '#E5E7EB',
+      borderColor: '#9CA3AF',
+      color: '#111827',
     },
     reminder: '#FCD34D',
     alert: '#F59E0B',

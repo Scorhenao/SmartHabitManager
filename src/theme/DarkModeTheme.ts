@@ -8,6 +8,11 @@ interface DarkModeTheme {
       secondary: string;
       tertiary: string;
     };
+    inputs: {
+      backgroundColor: string;
+      borderColor: string;
+      color: string;
+    };
     reminder: string;
     alert: string;
     success: string;
@@ -25,6 +30,11 @@ export const darkModeTheme: DarkModeTheme = {
       primary: '#4CAF92',
       secondary: '#5C9CED',
       tertiary: '#d83320',
+    },
+    inputs: {
+      backgroundColor: '#374151',
+      borderColor: '#4CAF92',
+      color: '#FFFFFF',
     },
     reminder: '#FCD34D',
     alert: '#F59E0B',
