@@ -1,6 +1,7 @@
 interface LightModeTheme {
   colors: {
     background: string;
+    navbar: string;
     texts: string;
     textSecondary: string;
     buttons: {
@@ -24,6 +25,7 @@ interface LightModeTheme {
 export const lightModeTheme: LightModeTheme = {
   colors: {
     background: '#FDFDFB',
+    navbar: '#1F2937',
     texts: '#111827',
     textSecondary: '#9CA3AF',
     buttons: {

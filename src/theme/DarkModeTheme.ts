@@ -1,6 +1,7 @@
 interface DarkModeTheme {
   colors: {
     background: string;
+    navbar: string;
     texts: string;
     textSecondary: string;
     buttons: {
@@ -24,6 +25,7 @@ interface DarkModeTheme {
 export const darkModeTheme: DarkModeTheme = {
   colors: {
     background: '#1F2937',
+    navbar: '#FDFDFB',
     texts: '#FFFFFF',
     textSecondary: '#9CA3AF',
     buttons: {

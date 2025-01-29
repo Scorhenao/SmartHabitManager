@@ -8,15 +8,17 @@ import {
   ScrollView,
   Platform,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
-import ThemeToggle from '../components/ThemeToggle';
 import CustomInput from '../components/CustomInput';
 import {useUser} from '../hooks/useUser';
+import NavBar from '../components/NavBar';
 
 const RegisterScreen = () => {
   const theme = useSelector(state => state.theme.theme);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -50,90 +52,97 @@ const RegisterScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, {backgroundColor: theme.colors.background}]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled">
-        <View
-          style={[
-            styles.circle1,
-            {backgroundColor: theme.colors.buttons.primary},
-          ]}
-        />
-        <View
-          style={[
-            styles.circle2,
-            {backgroundColor: theme.colors.buttons.secondary},
-          ]}
-        />
-        <View style={styles.themeToggle}>
-          <ThemeToggle />
-        </View>
-
-        <CustomInput
-          placeholder="Full Name"
-          value={name}
-          onChangeText={setName}
-        />
-        <CustomInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <CustomInput
-          placeholder="Cellphone"
-          value={cellphone}
-          onChangeText={setCellphone}
-          keyboardType="phone-pad"
-        />
-        <View style={styles.passwordContainer}>
-          <CustomInput
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-            style={styles.passwordInput}
+    <TouchableWithoutFeedback onPress={() => setDropdownVisible(false)}>
+      <KeyboardAvoidingView
+        style={[styles.container, {backgroundColor: theme.colors.background}]}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled">
+          <View
+            style={[
+              styles.circle1,
+              {backgroundColor: theme.colors.buttons.primary},
+            ]}
           />
-          <TouchableOpacity
-            style={styles.eyeIcon}
-            onPress={() => setShowPassword(!showPassword)}>
-            <Icon
-              name={showPassword ? 'eye' : 'eye-off'}
-              size={20}
-              color={theme.colors.texts}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.passwordContainer}>
-          <CustomInput
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry={!showConfirmPassword}
-            style={styles.passwordInput}
+          <View
+            style={[
+              styles.circle2,
+              {backgroundColor: theme.colors.buttons.secondary},
+            ]}
           />
-          <TouchableOpacity
-            style={styles.eyeIcon}
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-            <Icon
-              name={showConfirmPassword ? 'eye' : 'eye-off'}
-              size={20}
-              color={theme.colors.texts}
-            />
-          </TouchableOpacity>
-        </View>
 
-        <TouchableOpacity
-          style={[styles.btn, {backgroundColor: theme.colors.buttons.primary}]}
-          onPress={handleRegister}>
-          <Text style={{color: theme.colors.texts}}>Register</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <NavBar
+            dropdownVisible={dropdownVisible}
+            setDropdownVisible={setDropdownVisible}
+          />
+
+          <CustomInput
+            placeholder="Full Name"
+            value={name}
+            onChangeText={setName}
+          />
+          <CustomInput
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <CustomInput
+            placeholder="Cellphone"
+            value={cellphone}
+            onChangeText={setCellphone}
+            keyboardType="phone-pad"
+          />
+          <View style={styles.passwordContainer}>
+            <CustomInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              style={styles.passwordInput}
+            />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowPassword(!showPassword)}>
+              <Icon
+                name={showPassword ? 'eye' : 'eye-off'}
+                size={20}
+                color={theme.colors.texts}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.passwordContainer}>
+            <CustomInput
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry={!showConfirmPassword}
+              style={styles.passwordInput}
+            />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+              <Icon
+                name={showConfirmPassword ? 'eye' : 'eye-off'}
+                size={20}
+                color={theme.colors.texts}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            style={[
+              styles.btn,
+              {backgroundColor: theme.colors.buttons.primary},
+            ]}
+            onPress={handleRegister}>
+            <Text style={{color: theme.colors.texts}}>Register</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -182,12 +191,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 210,
     borderRadius: 100,
-  },
-  themeToggle: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 999,
   },
 });
 

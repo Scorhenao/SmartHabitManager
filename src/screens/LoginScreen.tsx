@@ -8,14 +8,16 @@ import {
   ScrollView,
   Platform,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import ThemeToggle from '../components/ThemeToggle';
 import CustomInput from '../components/CustomInput';
 import {useUser} from '../hooks/useUser';
+import NavBar from '../components/NavBar';
 
 const LoginScreen = () => {
   const theme = useSelector(state => state.theme.theme);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,52 +33,60 @@ const LoginScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, {backgroundColor: theme.colors.background}]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled">
-        <View
-          style={[
-            styles.circle1,
-            {backgroundColor: theme.colors.buttons.primary},
-          ]}
-        />
+    <TouchableWithoutFeedback onPress={() => setDropdownVisible(false)}>
+      <KeyboardAvoidingView
+        style={[styles.container, {backgroundColor: theme.colors.background}]}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled">
+          <View
+            style={[
+              styles.circle1,
+              {backgroundColor: theme.colors.buttons.primary},
+            ]}
+          />
 
-        <View
-          style={[
-            styles.circle2,
-            {backgroundColor: theme.colors.buttons.secondary},
-          ]}
-        />
-        <View style={styles.themeToggle}>
-          <ThemeToggle />
-        </View>
+          <View
+            style={[
+              styles.circle2,
+              {backgroundColor: theme.colors.buttons.secondary},
+            ]}
+          />
+          <NavBar
+            dropdownVisible={dropdownVisible}
+            setDropdownVisible={setDropdownVisible}
+          />
 
-        <CustomInput
-          placeholder="Enter your email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <CustomInput
-          placeholder="Enter your password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <TouchableOpacity style={[styles.btnForgot]} onPress={handleLogin}>
-          <Text style={{color: theme.colors.texts}}>Forgot your password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.btn, {backgroundColor: theme.colors.buttons.primary}]}
-          onPress={handleLogin}>
-          <Text style={{color: theme.colors.texts}}>Login</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <CustomInput
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <CustomInput
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <TouchableOpacity style={[styles.btnForgot]} onPress={handleLogin}>
+            <Text style={{color: theme.colors.texts}}>
+              Forgot your password?
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.btn,
+              {backgroundColor: theme.colors.buttons.primary},
+            ]}
+            onPress={handleLogin}>
+            <Text style={{color: theme.colors.texts}}>Login</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -115,12 +125,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 210,
     borderRadius: 100,
-  },
-  themeToggle: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 999,
   },
 });
 
