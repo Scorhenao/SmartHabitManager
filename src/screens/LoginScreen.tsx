@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useSelector} from 'react-redux';
+import Icon from 'react-native-vector-icons/Feather';
 import CustomInput from '../components/CustomInput';
 import {useUser} from '../hooks/useUser';
 import NavBar from '../components/NavBar';
@@ -21,6 +22,7 @@ const LoginScreen = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const {loginUser} = useUser();
 
@@ -46,7 +48,6 @@ const LoginScreen = () => {
               {backgroundColor: theme.colors.buttons.primary},
             ]}
           />
-
           <View
             style={[
               styles.circle2,
@@ -65,17 +66,32 @@ const LoginScreen = () => {
             keyboardType="email-address"
             autoCapitalize="none"
           />
-          <CustomInput
-            placeholder="Enter your password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+
+          <View style={styles.passwordContainer}>
+            <CustomInput
+              placeholder="Enter your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              style={styles.passwordInput}
+            />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowPassword(!showPassword)}>
+              <Icon
+                name={showPassword ? 'eye' : 'eye-off'}
+                size={20}
+                color={theme.colors.texts}
+              />
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity style={[styles.btnForgot]} onPress={handleLogin}>
             <Text style={{color: theme.colors.texts}}>
               Forgot your password?
             </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={[
               styles.btn,
@@ -98,6 +114,19 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 250,
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
   },
   btn: {
     width: 150,
