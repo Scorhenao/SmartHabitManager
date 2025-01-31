@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,12 +9,14 @@ import {
   Platform,
   Alert,
   TouchableWithoutFeedback,
+  Switch,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import CustomInput from '../components/CustomInput';
 import {useUser} from '../hooks/useUser';
 import NavBar from '../components/NavBar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const theme = useSelector(state => state.theme.theme);
@@ -23,11 +25,33 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberPassword, setRememberPassword] = useState(false);
 
   const {loginUser} = useUser();
 
+  useEffect(() => {
+    const loadSavedPassword = async () => {
+      const savedEmail = await AsyncStorage.getItem('email');
+      const savedPassword = await AsyncStorage.getItem('password');
+      if (savedEmail && savedPassword) {
+        setEmail(savedEmail);
+        setPassword(savedPassword);
+        setRememberPassword(true);
+      }
+    };
+    loadSavedPassword();
+  }, []);
+
   const handleLogin = async () => {
     try {
+      if (rememberPassword) {
+        await AsyncStorage.setItem('email', email);
+        await AsyncStorage.setItem('password', password);
+      } else {
+        await AsyncStorage.removeItem('email');
+        await AsyncStorage.removeItem('password');
+      }
+
       await loginUser({email, password});
     } catch (error: any) {
       Alert.alert('Error', error);
@@ -86,6 +110,19 @@ const LoginScreen = () => {
             </TouchableOpacity>
           </View>
 
+          <View style={styles.rememberContainer}>
+            <Switch
+              value={rememberPassword}
+              onValueChange={setRememberPassword}
+              trackColor={{
+                false: theme.colors.buttons.tertiary,
+                true: theme.colors.primary,
+              }}
+              thumbColor={rememberPassword ? theme.colors.primary : '#f4f3f4'}
+            />
+            <Text style={{color: theme.colors.texts}}>Remember password</Text>
+          </View>
+
           <TouchableOpacity style={[styles.btnForgot]} onPress={handleLogin}>
             <Text style={{color: theme.colors.texts}}>
               Forgot your password?
@@ -127,6 +164,11 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: 'absolute',
     right: 10,
+  },
+  rememberContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
   },
   btn: {
     width: 150,

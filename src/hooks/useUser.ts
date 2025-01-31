@@ -4,7 +4,7 @@ import {userImplementation} from '../../core/infrastructure/implementations/User
 import {UserLoginRequest} from '../../core/domain/request/UserLoginRequest';
 
 export const useUser = () => {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
   const registerUser = async (data: UserRegisterRequest) => {
     try {
       const response = await userImplementation.registerUser(data);
