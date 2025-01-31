@@ -105,7 +105,9 @@ const CreateHabitModal = ({visible, onClose}) => {
                 key={freq}
                 style={[
                   styles.btn,
-                  frequency === freq && {backgroundColor: theme.colors.primary},
+                  frequency === freq && {
+                    backgroundColor: theme.colors.buttons.primary,
+                  },
                 ]}
                 onPress={() =>
                   setFrequency(freq as 'daily' | 'weekly' | 'monthly')
