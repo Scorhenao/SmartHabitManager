@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {View, TouchableOpacity, Animated, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {useDispatch, useSelector} from 'react-redux';
-import {toggleDarkMode} from '../redux/reducers/themeSlice';
+import {toggleDarkMode} from '../redux/slice/themeSlice';
 
 export default function ThemeToggle() {
   const rotation = useRef(new Animated.Value(0)).current;
