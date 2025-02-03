@@ -17,6 +17,7 @@ import CustomInput from '../components/CustomInput';
 import {useUser} from '../hooks/useUser';
 import NavBar from '../components/NavBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingScreen from './LoadingScreen'; // Import the loader component
 
 const LoginScreen = () => {
   const theme = useSelector(state => state.theme.theme);
@@ -26,6 +27,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberPassword, setRememberPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // State to control loader visibility
 
   const {loginUser} = useUser();
 
@@ -44,6 +46,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
+      setLoading(true); // Start loading
       if (rememberPassword) {
         await AsyncStorage.setItem('email', email);
         await AsyncStorage.setItem('password', password);
@@ -54,7 +57,9 @@ const LoginScreen = () => {
 
       await loginUser({email, password});
     } catch (error: any) {
-      Alert.alert('Error', error);
+      Alert.alert('Error', error.message);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -83,60 +88,73 @@ const LoginScreen = () => {
             setDropdownVisible={setDropdownVisible}
           />
 
-          <CustomInput
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-
-          <View style={styles.passwordContainer}>
-            <CustomInput
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-              style={styles.passwordInput}
-            />
-            <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setShowPassword(!showPassword)}>
-              <Icon
-                name={showPassword ? 'eye' : 'eye-off'}
-                size={20}
-                color={theme.colors.texts}
+          {loading ? (
+            // Show the loading screen while the login is in progress
+            <LoadingScreen />
+          ) : (
+            <>
+              <CustomInput
+                placeholder="Enter your email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
-            </TouchableOpacity>
-          </View>
 
-          <View style={styles.rememberContainer}>
-            <Switch
-              value={rememberPassword}
-              onValueChange={setRememberPassword}
-              trackColor={{
-                false: theme.colors.buttons.tertiary,
-                true: theme.colors.primary,
-              }}
-              thumbColor={rememberPassword ? theme.colors.primary : '#f4f3f4'}
-            />
-            <Text style={{color: theme.colors.texts}}>Remember password</Text>
-          </View>
+              <View style={styles.passwordContainer}>
+                <CustomInput
+                  placeholder="Enter your password"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                  style={styles.passwordInput}
+                />
+                <TouchableOpacity
+                  style={styles.eyeIcon}
+                  onPress={() => setShowPassword(!showPassword)}>
+                  <Icon
+                    name={showPassword ? 'eye' : 'eye-off'}
+                    size={20}
+                    color={theme.colors.texts}
+                  />
+                </TouchableOpacity>
+              </View>
 
-          <TouchableOpacity style={[styles.btnForgot]} onPress={handleLogin}>
-            <Text style={{color: theme.colors.texts}}>
-              Forgot your password?
-            </Text>
-          </TouchableOpacity>
+              <View style={styles.rememberContainer}>
+                <Switch
+                  value={rememberPassword}
+                  onValueChange={setRememberPassword}
+                  trackColor={{
+                    false: theme.colors.buttons.tertiary,
+                    true: theme.colors.primary,
+                  }}
+                  thumbColor={
+                    rememberPassword ? theme.colors.primary : '#f4f3f4'
+                  }
+                />
+                <Text style={{color: theme.colors.texts}}>
+                  Remember password
+                </Text>
+              </View>
 
-          <TouchableOpacity
-            style={[
-              styles.btn,
-              {backgroundColor: theme.colors.buttons.primary},
-            ]}
-            onPress={handleLogin}>
-            <Text style={{color: theme.colors.texts}}>Login</Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.btnForgot]}
+                onPress={handleLogin}>
+                <Text style={{color: theme.colors.texts}}>
+                  Forgot your password?
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.btn,
+                  {backgroundColor: theme.colors.buttons.primary},
+                ]}
+                onPress={handleLogin}>
+                <Text style={{color: theme.colors.texts}}>Login</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
