@@ -1,8 +1,8 @@
-export interface Habit {
-  id: string;
+import {BaseEntity} from './baseEntity';
+
+export interface Habit extends BaseEntity {
   name: string;
   description: string;
   frequency: 'daily' | 'weekly' | 'monthly';
-  reminderTime: string; //HH MM YYYY
-  createdAt: string;
+  reminderTime: string; //HH MM
 }
