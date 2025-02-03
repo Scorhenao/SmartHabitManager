@@ -1,5 +1,5 @@
 export interface BaseEntity {
   id: string;
-  createAt: string;
+  createdAt: string;
   updatedAt: string;
 }

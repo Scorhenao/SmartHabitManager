@@ -8,6 +8,8 @@ import uuid from 'react-native-uuid';
 import {HabitRepository} from '../../domain/repositories/HabitRepository';
 import {CreateHabitResponse} from '../../domain/response/CreateHabitResponse';
 import {CreateHabitRequest} from '../../domain/request/CreateHabitRequest';
+import {DeleteHabitRequest} from '../../domain/request/DeleteHabitRequest';
+import {DeleteHabitResponse} from '../../domain/response/DeleteHabitResponse';
 
 export class HabitImplementation implements HabitRepository {
   private database!: SQLiteDatabase;
@@ -89,4 +91,25 @@ export class HabitImplementation implements HabitRepository {
     });
   }
 
+  async deleteHabit(data: DeleteHabitRequest): Promise<DeleteHabitResponse> {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx: Transaction) => {
+        tx.executeSql(
+          'DELETE FROM Habits WHERE id = ?',
+          [data.id],
+          (_: Transaction) => {
+            const response: DeleteHabitResponse = {
+              status: 200,
+              message: 'Habit deleted successfully!',
+            };
+            resolve(response);
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+      });
+    });
+  }
 }

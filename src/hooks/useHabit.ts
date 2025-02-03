@@ -2,8 +2,9 @@ import {useState, useEffect, useCallback} from 'react';
 import {CreateHabitRequest} from './../../core/domain/request/CreateHabitRequest';
 import {useCaseFactory} from '../../core/app/factory/useCaseFactory';
 
-interface fetchHabitResponse {
-  createAt: string;
+interface FetchHabitResponse {
+  updatedAt: string;
+  createdAt: string;
   id: string;
   name: string;
   description: string;
@@ -13,7 +14,7 @@ interface fetchHabitResponse {
 
 export const useHabit = () => {
   const {habitUseCase} = useCaseFactory();
-  const [habits, setHabits] = useState<fetchHabitResponse[]>([]);
+  const [habits, setHabits] = useState<FetchHabitResponse[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const createHabit = useCallback(
@@ -43,8 +44,19 @@ export const useHabit = () => {
     fetchHabits();
   }, [fetchHabits]);
 
+  const deleteHabit = async (id: string) => {
+    try {
+      await habitUseCase.deleteHabit({id});
+      await fetchHabits();
+    } catch (err) {
+      console.error('Error deleting habit:', err);
+      setError('Failed to delete habit. Please try again later.');
+    }
+  };
+
   return {
     createHabit,
+    deleteHabit,
     habits,
     error,
   };
