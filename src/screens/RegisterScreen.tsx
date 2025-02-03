@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: 250,
-    marginBottom: 15,
   },
   passwordInput: {
     flex: 1,
