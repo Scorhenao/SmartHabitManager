@@ -47,7 +47,7 @@ const CreateHabitModal = ({visible, onClose}) => {
       await createHabit(habitData);
       Alert.alert('Habit created successfully!', habitName);
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error creating habit:', err);
       Alert.alert(
         'Failed to create habit',

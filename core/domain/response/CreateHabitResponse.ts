@@ -7,6 +7,7 @@ export interface CreateHabitResponse {
     frequency: 'daily' | 'weekly' | 'monthly';
     reminderTime: string;
     createdAt: string;
+    updatedAt: string;
   };
   message: string;
 }

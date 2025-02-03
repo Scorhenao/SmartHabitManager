@@ -25,7 +25,8 @@ export class HabitImplementation implements HabitRepository {
               description VARCHAR, 
               frequency INTEGER NOT NULL, 
               reminderTime DATETIME NOT NULL,
-              createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+              createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+              updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
             )`,
         );
       });
@@ -51,6 +52,7 @@ export class HabitImplementation implements HabitRepository {
                 frequency: data.frequency,
                 reminderTime: data.reminderTime,
                 createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
               },
               message: 'Habit created successfully!',
             };
@@ -65,18 +67,18 @@ export class HabitImplementation implements HabitRepository {
     });
   }
 
-  async getAllHabits(): Promise<CreateHabitResponse[]> {
+  async getAllHabits(): Promise<[]> {
     return new Promise((resolve, reject) => {
       db.transaction((tx: Transaction) => {
         tx.executeSql(
           'SELECT * FROM Habits',
           [],
           (_: Transaction, {rows}: any) => {
-            const habits: CreateHabitResponse[] = [];
+            const habits = [];
             for (let i = 0; i < rows.length; i++) {
               habits.push(rows.item(i));
             }
-            resolve(habits);
+            resolve(habits as []);
           },
           (_: Transaction, error: SQLError) => {
             reject(new Error(error.message));
@@ -86,4 +88,5 @@ export class HabitImplementation implements HabitRepository {
       });
     });
   }
+
 }
